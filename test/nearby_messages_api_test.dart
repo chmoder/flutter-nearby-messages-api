@@ -16,6 +16,7 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await NearbyMessagesApi.platformVersion, '42');
+    NearbyMessagesApi nearbyMessagesApi = new NearbyMessagesApi();
+    expect(await nearbyMessagesApi.platformVersion, '42');
   });
 }

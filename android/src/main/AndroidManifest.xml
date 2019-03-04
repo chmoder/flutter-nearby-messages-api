@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.chmoder.nearby_messages_api">
     <application>
-        <receiver android:name="NearbyMessageReceiver" >
-        </receiver>
+        <!--<receiver android:name="NearbyMessagesApiPlugin" >-->
+        <!--</receiver>-->
     </application>
 </manifest>
