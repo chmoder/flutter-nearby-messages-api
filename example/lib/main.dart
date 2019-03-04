@@ -13,6 +13,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  NearbyMessagesApi nearbyMessagesApi = NearbyMessagesApi();
 
   @override
   void initState() {
@@ -25,10 +26,14 @@ class _MyAppState extends State<MyApp> {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await NearbyMessagesApi.platformVersion;
+      platformVersion = await nearbyMessagesApi.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
+
+    await nearbyMessagesApi.backgroundSubscribe();
+//    MessageReceiver receiver = new MessageReceiver();
+//    receiver.onMessageReceived.listen((String msg) => print(msg));
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling

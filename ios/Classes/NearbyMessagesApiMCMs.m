@@ -6,6 +6,7 @@
 //
 
 #import "NearbyMessagesApiMCMs.h"
+#import <Flutter/Flutter.h>
 #import <GNSMessages.h>
 
 static NSString * const kMyAPIKey = @"<insert API key here>";
@@ -16,9 +17,22 @@ static NSString * const kBackgroundModeSaveKey = @"NearbyBackgroundEnabled";
 @property(nonatomic) GNSMessageManager *messageMgr;
 @property(nonatomic) id<GNSPublication> publication;
 @property(nonatomic) id<GNSSubscription> subscription;
+@property(nonatomic) FlutterMethodChannel *channel;
 @end
 
 @implementation NearbyMessagesApiMCMs
+
+- (instancetype)init {
+    return [self initWithChannel:nil];
+}
+
+- (instancetype)initWithChannel:(FlutterMethodChannel *)channel {
+    self = [super init];
+    if (self) {
+        self.channel = channel;
+    }
+    return self;
+}
 
 /// Starts sharing with a randomized name and scanning for others.
 - (void)backgroundSubscribe {
@@ -46,16 +60,11 @@ static NSString * const kBackgroundModeSaveKey = @"NearbyBackgroundEnabled";
     _subscription = [_messageMgr
                      subscriptionWithMessageFoundHandler:^(GNSMessage *message) {
                          NSString *messageString = stringFromData(message.content);
-                         
-                         // Send a local notification if not in the foreground.
-                         if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
-                             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                             localNotification.alertBody = messageString;
-                             [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-                         }
+                         [self.channel invokeMethod:@"onFound" arguments:messageString];
                      }
                      messageLostHandler:^(GNSMessage *message) {
-                   
+                         NSString *messageString = stringFromData(message.content);
+                         [self.channel invokeMethod:@"onLost" arguments:messageString];
                      }
                      paramsBlock:^(GNSSubscriptionParams *params) {
                          params.strategy = strategy;
