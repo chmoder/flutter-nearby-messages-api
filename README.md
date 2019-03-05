@@ -2,7 +2,7 @@
 
 Google Nearby Messages API for Flutter
 
-## Installation
+### Installation
 First, add `nearby_messages_api` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
 ### iOS
