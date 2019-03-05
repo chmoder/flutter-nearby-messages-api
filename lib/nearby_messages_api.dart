@@ -5,13 +5,13 @@ import 'package:flutter/services.dart';
 class NearbyMessagesApi {
   MethodChannel _channel = const MethodChannel('nearby_messages_api');
 
-  NearbyMessagesApi(){
+  NearbyMessagesApi(Function onFound, Function onLost) {
     _channel.setMethodCallHandler((MethodCall call) async {
       switch (call.method) {
         case 'onFound':
-          return '${call.arguments}';
+          return onFound(call.arguments);
         case 'onLost':
-          return '${call.arguments}';
+          return onLost(call.arguments);
         default:
           throw MissingPluginException();
       }

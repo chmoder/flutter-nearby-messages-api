@@ -13,7 +13,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  NearbyMessagesApi nearbyMessagesApi = NearbyMessagesApi();
+
+  static void onFound(dynamic arguments) {
+    print(arguments);
+  }
+
+  static void onLost(dynamic arguments) {
+    print(arguments);
+  }
+
+  NearbyMessagesApi nearbyMessagesApi = NearbyMessagesApi(onFound, onLost);
 
   @override
   void initState() {
