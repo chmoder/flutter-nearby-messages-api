@@ -9,7 +9,6 @@ First, add `nearby_messages_api` as a [dependency in your pubspec.yaml file](htt
 Coming Soon
 
 ### Android
-
 Get and add a google cloud nearby messages API key to your project [https://developers.google.com/nearby/messages/android/get-started](https://developers.google.com/nearby/messages/android/get-started)
 
 ### Example
