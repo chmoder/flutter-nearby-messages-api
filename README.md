@@ -1,4 +1,4 @@
-# nearby_messages_api
+# Nearby Messages API
 
 Google Nearby Messages API for Flutter
 
