@@ -2,7 +2,7 @@ name: nearby_messages_api
 description: Google Nearby Messages API for Flutter
 version: 0.0.1
 author: Thomas Cross <tom.bz2@gmail.com>
-homepage: http://www.chmoder.org
+homepage: https://github.com/chmoder/flutter-nearby-messages-api
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
