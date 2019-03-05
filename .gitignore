@@ -1,7 +1,16 @@
-.DS_Store
+*.iml         // IntelliJ
+*.ipr         // IntelliJ
+*.iws         // IntelliJ
+.idea/        // IntelliJ
+.DS_Store     // Mac
+
 .dart_tool/
 
 .packages
 .pub/
 
 build/
+
+doc/api/
+
+pubspec.lock
