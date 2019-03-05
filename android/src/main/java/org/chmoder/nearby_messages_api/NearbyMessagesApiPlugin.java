@@ -32,6 +32,12 @@ public class NearbyMessagesApiPlugin extends BroadcastReceiver implements Method
     private final Registrar registrar;
     private final MethodChannel channel;
 
+    /**
+     * set up the broadcast receiver and nearby message listener
+     * @param activity
+     * @param registrar
+     * @param methodChannel
+     */
     private NearbyMessagesApiPlugin(Activity activity, Registrar registrar, MethodChannel methodChannel) {
         this.activity = activity;
         this.registrar = registrar;
@@ -57,6 +63,12 @@ public class NearbyMessagesApiPlugin extends BroadcastReceiver implements Method
         channel.setMethodCallHandler(plugin);
     }
 
+    /**
+     * attache the nearby messages listener to a broadcast receiver
+     * background service can pass messages to the host this way
+     * @param context
+     * @param intent
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         Nearby.getMessagesClient(context).handleIntent(intent, new MessageListener() {
@@ -76,6 +88,9 @@ public class NearbyMessagesApiPlugin extends BroadcastReceiver implements Method
         });
     }
 
+    /**
+     * background receiver subscription
+     */
     void backgroundSubscribe() {
         Log.i(TAG, "Subscribing for background updates.");
         SubscribeOptions options = new SubscribeOptions.Builder()
@@ -84,10 +99,17 @@ public class NearbyMessagesApiPlugin extends BroadcastReceiver implements Method
         Nearby.getMessagesClient(activity).subscribe(getPendingIntent(), options);
     }
 
+    /**
+     * unsubscribe from broadcast receiver
+     */
     void backgroundUnsubscribe() {
         Nearby.getMessagesClient(activity).unsubscribe(getPendingIntent());
     }
 
+    /**
+     * makes this class a pending intent for the broadcast receiver
+     * @return
+     */
     private PendingIntent getPendingIntent() {
         return PendingIntent.getBroadcast(
                 activity,
@@ -96,6 +118,11 @@ public class NearbyMessagesApiPlugin extends BroadcastReceiver implements Method
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    /**
+     * Host will invoke these methods to set up the nearby messages API listener
+     * @param call
+     * @param result
+     */
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         switch (call.method) {
