@@ -6,14 +6,14 @@ Google Nearby Messages API for Flutter
 
 First, add `nearby_messages_api` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
-###iOS
+### iOS
 Coming Soon
 
-###Android
+### Android
 
 Get and add a google cloud nearby messages API key to your project [https://developers.google.com/nearby/messages/android/get-started](https://developers.google.com/nearby/messages/android/get-started)
 
-###Example
+### Example
 ```dart
 import 'package:nearby_messages_api/nearby_messages_api.dart';
 
