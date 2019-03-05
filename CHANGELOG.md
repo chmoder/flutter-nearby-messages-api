@@ -1,4 +1,4 @@
-## 0.0.1
+## 0.0.2
 
 Initial release is very "developer preview"-ish.  It should do everything it needs to for iOS and Android with basic documentation.
 
