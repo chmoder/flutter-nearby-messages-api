@@ -6,12 +6,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
+import com.google.android.gms.nearby.messages.PublishOptions;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 
@@ -31,6 +33,8 @@ public class NearbyMessagesApiPlugin extends BroadcastReceiver implements Method
     private final Activity activity;
     private final Registrar registrar;
     private final MethodChannel channel;
+    private Message mActiveMessage;
+    private PendingIntent pendingIntent;
 
     /**
      * set up the broadcast receiver and nearby message listener
@@ -104,6 +108,7 @@ public class NearbyMessagesApiPlugin extends BroadcastReceiver implements Method
      */
     void backgroundUnsubscribe() {
         Nearby.getMessagesClient(activity).unsubscribe(getPendingIntent());
+        pendingIntent = null;
     }
 
     /**
@@ -111,11 +116,37 @@ public class NearbyMessagesApiPlugin extends BroadcastReceiver implements Method
      * @return
      */
     private PendingIntent getPendingIntent() {
-        return PendingIntent.getBroadcast(
-                activity,
-                0,
-                new Intent(activity, NearbyMessagesApiPlugin.class),
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        if (pendingIntent == null) {
+            pendingIntent = PendingIntent.getBroadcast(
+                    activity,
+                    0,
+                    new Intent(activity, NearbyMessagesApiPlugin.class),
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+        }
+        return pendingIntent;
+    }
+
+    void publish() {
+        unPublish();
+
+        String deviceId = Settings.Secure.getString(activity.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        mActiveMessage = new Message(deviceId.getBytes());
+        Strategy strategy = new Strategy.Builder()
+                .setTtlSeconds(Strategy.TTL_SECONDS_MAX)
+                .build();
+        PublishOptions options = new PublishOptions.Builder()
+                .setStrategy(strategy)
+                .build();
+        Nearby.getMessagesClient(activity).publish(mActiveMessage, options);
+    }
+
+    void unPublish() {
+        if (mActiveMessage != null) {
+            Nearby.getMessagesClient(activity).unpublish(mActiveMessage);
+            mActiveMessage = null;
+        }
     }
 
     /**
@@ -135,6 +166,14 @@ public class NearbyMessagesApiPlugin extends BroadcastReceiver implements Method
                 break;
             case "backgroundUnsubscribe":
                 this.backgroundUnsubscribe();
+                result.success(null);
+                break;
+            case "publish":
+                this.publish();
+                result.success(null);
+                break;
+            case "unPublish":
+                this.unPublish();
                 result.success(null);
                 break;
             default:

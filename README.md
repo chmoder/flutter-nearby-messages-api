@@ -31,12 +31,13 @@ class main {
     }
     
     NearbyMessagesApi nearbyMessagesApi = NearbyMessagesApi(onFound, onLost);
-    
+ 
     Future<void> main() async {
+      await nearbyMessagesApi.publish();
       await nearbyMessagesApi.backgroundSubscribe();
-    }
     
     Future<void> dispose() async {
+      await nearbyMessagesApi.unPublish();
       await nearbyMessagesApi.backgroundUnsubscribe();
     }
 }

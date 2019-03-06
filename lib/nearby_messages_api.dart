@@ -23,6 +23,14 @@ class NearbyMessagesApi {
     return version;
   }
 
+  Future<void> publish() async {
+    await _channel.invokeMethod('publish');
+  }
+
+  Future<void> unPublish() async {
+    await _channel.invokeMethod('unPublish');
+  }
+
   Future<void> backgroundSubscribe() async {
     await _channel.invokeMethod('backgroundSubscribe');
   }
